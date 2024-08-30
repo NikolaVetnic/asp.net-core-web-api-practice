@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  todoapi:
+    image: todoapi:latest
+    build:
+      context: ../TodoApi  # Path to the project relative to docker-compose.yml path
+      dockerfile: Dockerfile # name of the Dockerfile
+    ports:
+      - "8080:8080"  # Host:Container
+      - "8081:8081"  # Host:Container
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_Kestrel__Certificates__Default__Path: "/https/aspnetapp.pfx"
+      ASPNETCORE_Kestrel__Certificates__Default__Password: "password123"
+    volumes:
+      - ${USERPROFILE}/.aspnet/https/aspnetapp.pfx:/https/aspnetapp.pfx
