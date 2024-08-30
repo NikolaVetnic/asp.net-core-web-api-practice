@@ -9,18 +9,6 @@ builder.Services.AddControllers();
 
 var app = builder.Build();
 
-// Configure pipeline
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseDeveloperExceptionPage();
-//}
-
-//app.UseHttpsRedirection();
-
-//app.UseRouting();
-
-//app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
