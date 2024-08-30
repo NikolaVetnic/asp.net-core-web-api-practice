@@ -140,5 +140,3 @@ In short:
 - *Docker Compose* manages the configuration and orchestration of containers, defining how the Docker image should run, including network ports, environment variables, and volumes.
 
 Together, they allow one to easily build, configure, and deploy a .NET application in a consistent environment.
-
-#docker #Dockerfile #docker-compose #asp #asp-net #deployment 
