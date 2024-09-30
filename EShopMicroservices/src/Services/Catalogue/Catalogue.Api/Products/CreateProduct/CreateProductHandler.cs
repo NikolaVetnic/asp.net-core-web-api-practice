@@ -14,7 +14,6 @@ internal class CreateProductCommandHandler(IDocumentSession session) :
             Price = command.Price
         };
 
-        // todo: Save to database
         session.Store(product);
         await session.SaveChangesAsync(cancellationToken);
 
