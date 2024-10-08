@@ -5,7 +5,7 @@ internal class GetProductsQueryHandler(IDocumentSession session, ILogger<GetProd
 {
     public async Task<GetProductsResult> Handle(GetProductsQuery query, CancellationToken cancellationToken)
     {
-        logger.LogInformation("GetProductsHandler.Handle called with @{Query}", query);
+        var products = await session.Query<Product>()
 
         var products = await session.Query<Product>().ToListAsync(cancellationToken);
 
