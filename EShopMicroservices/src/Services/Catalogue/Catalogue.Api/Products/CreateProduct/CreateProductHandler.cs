@@ -1,4 +1,6 @@
-﻿namespace Catalogue.Api.Products.CreateProduct;
+﻿
+
+ namespace Catalogue.Api.Products.CreateProduct;
 
 internal class CreateProductCommandHandler(IDocumentSession session) : 
     ICommandHandler<CreateProductCommand, CreateProductResult>
