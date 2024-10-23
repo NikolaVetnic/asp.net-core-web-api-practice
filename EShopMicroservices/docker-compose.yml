@@ -4,5 +4,11 @@ services:
   cataloguedb:
     image: postgres    
    
+  catalogue.api:
+    image: ${DOCKER_REGISTRY-}catalogueapi
+    build:
+      context: .
+      dockerfile: src/Services/Catalogue/Catalogue.Api/Dockerfile
+
 volumes:
   postgres_catalogue:
