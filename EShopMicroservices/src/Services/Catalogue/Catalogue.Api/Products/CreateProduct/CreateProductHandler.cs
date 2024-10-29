@@ -1,6 +1,6 @@
 ﻿namespace Catalogue.Api.Products.CreateProduct;
 
-internal class CreateProductCommandHandler(IDocumentSession session, ILogger<CreateProductCommand> logger) 
+internal class CreateProductCommandHandler(IDocumentSession session) 
     : ICommandHandler<CreateProductCommand, CreateProductResult>
 {
     public async Task<CreateProductResult> Handle(CreateProductCommand command, CancellationToken cancellationToken)

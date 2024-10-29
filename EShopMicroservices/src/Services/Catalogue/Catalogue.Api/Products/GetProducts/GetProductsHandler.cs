@@ -1,6 +1,6 @@
 ﻿namespace Catalogue.Api.Products.GetProducts;
 
-internal class GetProductsQueryHandler(IDocumentSession session, ILogger<GetProductsQueryHandler> logger) : 
+internal class GetProductsQueryHandler(IDocumentSession session) : 
     IQueryHandler<GetProductsQuery, GetProductsResult>
 {
     public async Task<GetProductsResult> Handle(GetProductsQuery query, CancellationToken cancellationToken)
