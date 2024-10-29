@@ -1,15 +1,16 @@
 ﻿namespace Basket.Api.Basket.StoreBasket;
 
-public class StoreBasketCommandHandler : ICommandHandler<StoreBasketCommand, StoreBasketResult>
+public class StoreBasketCommandHandler(IBasketRepository repository) 
+    : ICommandHandler<StoreBasketCommand, StoreBasketResult>
 {
     public async Task<StoreBasketResult> Handle(StoreBasketCommand command, CancellationToken cancellationToken)
     {
-        var cart = command.Cart;
-
         // todo: store basket in database (use Marten upsert - if exists update, if not create)
         // todo: update cache
 
-        return new StoreBasketResult("username");
+        await repository.StoreBasket(command.Cart, cancellationToken);
+
+        return new StoreBasketResult(command.Cart.Username);
     }
 }
 
