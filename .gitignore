@@ -1,6 +1,9 @@
 # Exclude override settings file
 appsettings.override.json
 
+# Personal configuration files
+**/docker-compose/.env
+
 # =-=-=-= VSC
 .vscode/*
 !.vscode/settings.json
