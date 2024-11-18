@@ -25,6 +25,12 @@ services:
     volumes:
       - postgres_catalogue:/var/lib/postgresql/data
 
+  distributedcache:
+    container_name: distributedcache
+    restart: always # restart whenever there is any problem with the cache
+    ports:
+      - "6379:6379"
+  
   catalogue.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
