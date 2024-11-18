@@ -5,9 +5,10 @@ public class StoreBasketCommandHandler(IBasketRepository repository)
 {
     public async Task<StoreBasketResult> Handle(StoreBasketCommand command, CancellationToken cancellationToken)
     {
-        // todo: store basket in database (use Marten upsert - if exists update, if not create)
-        // todo: update cache
-
+        // todo: communicate with grpc Discount service
+        
+        
+        // store basket in database (use Marten upsert - if exists update, if not create) and update cache
         await repository.StoreBasket(command.Cart, cancellationToken);
 
         return new StoreBasketResult(command.Cart.Username);
