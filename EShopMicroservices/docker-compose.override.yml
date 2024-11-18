@@ -35,7 +35,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
-      - ASPNETCORE_HTTPS_PORTS=8081
+            # - ASPNETCORE_HTTPS_PORTS=8081
       - ConnectionStrings__Database=Server=cataloguedb;Port=5432;Database=CatalogueDb;User Id=postgres;Password=postgres;Include Error Detail=true # Server is the name of the database service
     depends_on:
       - cataloguedb
