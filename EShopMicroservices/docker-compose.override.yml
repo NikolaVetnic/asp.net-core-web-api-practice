@@ -1,36 +1,36 @@
-version: '3.4'
+version: "3.4"
 
 services:
-  basketdb:
-    container_name: basketdb
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=BasketDb
-    restart: always
-    ports:
-      - "5433:5432"
-    volumes:
-      - postgres_basket:/var/lib/postgresql/data
+    basketdb:
+        container_name: basketdb
+        environment:
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
+            - POSTGRES_DB=BasketDb
+        restart: always
+        ports:
+            - "5433:5432"
+        volumes:
+            - postgres_basket:/var/lib/postgresql/data
 
-  cataloguedb:
-    container_name: cataloguedb
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=CatalogueDb
-    restart: always
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_catalogue:/var/lib/postgresql/data
+    cataloguedb:
+        container_name: cataloguedb
+        environment:
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
+            - POSTGRES_DB=CatalogueDb
+        restart: always
+        ports:
+            - "5432:5432"
+        volumes:
+            - postgres_catalogue:/var/lib/postgresql/data
 
-  distributedcache:
-    container_name: distributedcache
-    restart: always # restart whenever there is any problem with the cache
-    ports:
-      - "6379:6379"
-  
+    distributedcache:
+        container_name: distributedcache
+        restart: always # restart whenever there is any problem with the cache
+        ports:
+            - "6379:6379"
+
     basket.api:
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
@@ -48,17 +48,30 @@ services:
             - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
             - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
 
-  catalogue.api:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=8080
+    catalogue.api:
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Development
+            - ASPNETCORE_HTTP_PORTS=8080
             # - ASPNETCORE_HTTPS_PORTS=8081
-      - ConnectionStrings__Database=Server=cataloguedb;Port=5432;Database=CatalogueDb;User Id=postgres;Password=postgres;Include Error Detail=true # Server is the name of the database service
-    depends_on:
-      - cataloguedb
-    ports:
-      - "6000:8080"
-      - "6060:8081"
-    volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+            - ConnectionStrings__Database=Server=cataloguedb;Port=5432;Database=CatalogueDb;User Id=postgres;Password=postgres;Include Error Detail=true # Server is the name of the database service
+        depends_on:
+            - cataloguedb
+        ports:
+            - "6000:8080"
+            - "6060:8081"
+        volumes:
+            - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+            - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+
+    discount.grpc:
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Development
+            - ASPNETCORE_HTTP_PORTS=8080
+            # - ASPNETCORE_HTTPS_PORTS=8081
+            - ConnectionStrings__Database=Data Source=discountdb
+        ports:
+            - "6002:8080"
+            # - "6062:8081"
+        volumes:
+            - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+            - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro

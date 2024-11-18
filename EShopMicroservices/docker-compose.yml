@@ -5,8 +5,8 @@ services:
     image: postgres
 
   cataloguedb:
-    image: postgres    
-   
+    image: postgres
+  
   distributedcache:
     image: redis
   
@@ -21,6 +21,12 @@ services:
     build:
       context: .
       dockerfile: src/Services/Catalogue/Catalogue.Api/Dockerfile
+  
+  discount.grpc:
+    image: ${DOCKER_REGISTRY-}discountgrpc
+    build:
+      context: .
+      dockerfile: src/Services/Discount/Discount.Grpc/Dockerfile
 
 volumes:
   postgres_basket:
