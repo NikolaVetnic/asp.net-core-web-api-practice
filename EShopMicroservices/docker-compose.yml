@@ -10,6 +10,12 @@ services:
   distributedcache:
     image: redis
   
+  basket.api:
+    image: ${DOCKER_REGISTRY-}basketapi
+    build:
+      context: .
+      dockerfile: src/Services/Basket/Basket.Api/Dockerfile
+  
   catalogue.api:
     image: ${DOCKER_REGISTRY-}catalogueapi
     build:
