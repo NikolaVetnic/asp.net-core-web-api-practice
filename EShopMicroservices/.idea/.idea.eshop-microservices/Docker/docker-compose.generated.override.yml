@@ -1,0 +1,21 @@
+# This is a generated file. Not intended for manual editing.
+version: "3.4"
+services:
+  catalogue.api:
+    build:
+      context: "/Users/nikolavetnic/RiderProjects/asp.net-core-web-api-practice/EShopMicroservices"
+      dockerfile: "src/Services/Catalogue/Catalogue.Api/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net8.0/Catalogue.Api.dll"
+    environment:
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "catalogueapi:dev"
+    ports: []
+    volumes:
+    - "/Users/nikolavetnic/.nuget/packages:/home/app/.nuget/packages"
+    - "/Users/nikolavetnic/RiderProjects/asp.net-core-web-api-practice/EShopMicroservices/src/Services/Catalogue/Catalogue.Api:/app:rw"
+    - "/Users/nikolavetnic/RiderProjects/asp.net-core-web-api-practice/EShopMicroservices:/src:rw"
+    working_dir: "/app"
