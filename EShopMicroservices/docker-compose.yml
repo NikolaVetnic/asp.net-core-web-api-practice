@@ -11,18 +11,21 @@ services:
     image: redis
   
   basket.api:
+    container_name: basket.api
     image: ${DOCKER_REGISTRY-}basketapi
     build:
       context: .
       dockerfile: src/Services/Basket/Basket.Api/Dockerfile
   
   catalogue.api:
+    container_name: catalogue.api
     image: ${DOCKER_REGISTRY-}catalogueapi
     build:
       context: .
       dockerfile: src/Services/Catalogue/Catalogue.Api/Dockerfile
   
   discount.grpc:
+    container_name: discount.grpc
     image: ${DOCKER_REGISTRY-}discountgrpc
     build:
       context: .
