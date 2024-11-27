@@ -3,14 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Discount.Grpc.Data;
 
-public class DiscountContext : DbContext
+public class DiscountContext(DbContextOptions<DiscountContext> options) : DbContext(options)
 {
-    public DiscountContext(DbContextOptions<DiscountContext> options)
-        : base(options)
-    {
-    }
-
-    public DbSet<Coupon> Coupons { get; set; } = default!;
+    public DbSet<Coupon> Coupons { get; init; } = default!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
