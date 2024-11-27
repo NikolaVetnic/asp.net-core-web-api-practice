@@ -4,6 +4,12 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
+
+/*
+ * Before building the application we use the "add services" metho-
+ * ds for dependency injection.
+ */
+
 var assembly = typeof(Program).Assembly;
 
 builder.Services.AddMediatR(config =>
@@ -33,6 +39,12 @@ builder.Services.AddHealthChecks()
 var app = builder.Build();
 
 // Configure the HTTP request pipeline
+
+/*
+ * After building the application we use "use" or "map" function m-
+ * ethods for configuring the HTTP request lifecycle.
+ */
+
 app.MapCarter();
 
 app.UseExceptionHandler(_ => { });
