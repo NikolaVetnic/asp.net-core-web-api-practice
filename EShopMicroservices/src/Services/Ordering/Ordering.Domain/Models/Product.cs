@@ -1,11 +1,11 @@
 namespace Ordering.Domain.Models;
 
-public class Product : Entity<Guid>
+public class Product : Entity<ProductId>
 {
     public required string Name { get; init; }
     public required decimal Price { get; init; }
 
-    public static Product Create(Guid id, string name, decimal price)
+    public static Product Create(ProductId id, string name, decimal price)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(price);
