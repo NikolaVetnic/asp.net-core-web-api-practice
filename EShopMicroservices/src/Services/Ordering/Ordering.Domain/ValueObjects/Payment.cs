@@ -2,20 +2,16 @@ namespace Ordering.Domain.ValueObjects;
 
 public record Payment
 {
-    private Payment(string cardName, string cardNumber, string expiration, string cvv, int paymentMethod)
-    {
-        CardName = cardName;
-        CardNumber = cardNumber;
-        Expiration = expiration;
-        Cvv = cvv;
-        PaymentMethod = paymentMethod;
-    }
+    public required string CardName;
+    public required string CardNumber;
+    public required string Cvv;
+    public required string Expiration;
+    public required int PaymentMethod;
 
-    public string? CardName { get; }
-    public string CardNumber { get; }
-    public string Expiration { get; }
-    public string Cvv { get; }
-    public int PaymentMethod { get; }
+    // ReSharper disable once MemberCanBePrivate.Global
+    protected Payment()
+    {
+    }
 
     public static Payment Of(string cardName, string cardNumber, string expiration, string cvv, int paymentMethod)
     {
@@ -24,6 +20,13 @@ public record Payment
         ArgumentException.ThrowIfNullOrWhiteSpace(cvv);
         ArgumentOutOfRangeException.ThrowIfGreaterThan(cvv.Length, 3);
 
-        return new Payment(cardName, cardNumber, expiration, cvv, paymentMethod);
+        return new Payment
+        {
+            CardName = cardName,
+            CardNumber = cardNumber,
+            Cvv = cvv,
+            Expiration = expiration,
+            PaymentMethod = paymentMethod
+        };
     }
 }

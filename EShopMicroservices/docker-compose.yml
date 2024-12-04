@@ -10,6 +10,10 @@ services:
   distributedcache:
     image: redis
   
+  orderdb:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    platform: linux/amd64
+  
   basket.api:
     container_name: basket.api
     image: ${DOCKER_REGISTRY-}basketapi

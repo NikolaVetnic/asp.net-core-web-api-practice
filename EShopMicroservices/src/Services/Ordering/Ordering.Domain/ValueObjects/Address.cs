@@ -2,25 +2,24 @@ namespace Ordering.Domain.ValueObjects;
 
 public record Address
 {
-    private Address(string firstName, string lastName, string emailAddress,
-        string addressLine, string country, string state, string zipCode)
+    // ReSharper disable once MemberCanBePrivate.Global
+    protected Address()
     {
-        FirstName = firstName;
-        LastName = lastName;
-        EmailAddress = emailAddress;
-        AddressLine = addressLine;
-        Country = country;
-        State = state;
-        ZipCode = zipCode;
     }
 
-    public string FirstName { get; }
-    public string LastName { get; }
-    public string? EmailAddress { get; }
-    public string AddressLine { get; }
-    public string Country { get; }
-    public string State { get; }
-    public string ZipCode { get; }
+    /*
+     * Setting these as nullable should be ok because it is enforced by
+     * Of method. On the other hand, I need an empty ctor for the EF C-
+     * ore, so it cannot be required. This should be addressed.
+     */
+
+    public required string FirstName { get; init; }
+    public required string LastName { get; init; }
+    public required string EmailAddress { get; init; }
+    public required string AddressLine { get; init; }
+    public required string Country { get; init; }
+    public required string State { get; init; }
+    public required string ZipCode { get; init; }
 
     public static Address Of(string firstName, string lastName, string emailAddress,
         string addressLine, string country, string state, string zipCode)
@@ -28,6 +27,15 @@ public record Address
         ArgumentException.ThrowIfNullOrWhiteSpace(emailAddress);
         ArgumentException.ThrowIfNullOrWhiteSpace(addressLine);
 
-        return new Address(firstName, lastName, emailAddress, addressLine, country, state, zipCode);
+        return new Address
+        {
+            FirstName = firstName,
+            LastName = lastName,
+            EmailAddress = emailAddress,
+            AddressLine = addressLine,
+            Country = country,
+            State = state,
+            ZipCode = zipCode
+        };
     }
 }

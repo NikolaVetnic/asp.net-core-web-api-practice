@@ -7,7 +7,7 @@ public class Customer : Entity<CustomerId>
 
     public static Customer Create(CustomerId id, string name, string email)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(name);
+        ArgumentException.ThrowIfNullOrWhiteSpace(name); // domain validations
         ArgumentException.ThrowIfNullOrWhiteSpace(email);
 
         var customer = new Customer
