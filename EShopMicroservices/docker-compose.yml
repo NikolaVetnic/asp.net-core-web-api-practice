@@ -3,7 +3,7 @@ version: "3.4"
 services:
   basket-db:
     image: postgres
-
+  
   catalogue-db:
     image: postgres
   
@@ -20,6 +20,12 @@ services:
   message-broker:
     image: rabbitmq:management
   
+  yarp-api-gateway:
+    container_name: yarp-api-gateway
+    image: ${DOCKER_REGISTRY-}yarpapigateway
+    build:
+      context: ./src
+      dockerfile: ApiGateways/YarpApiGateway/Dockerfile
   
   basket.api:
     container_name: basket.api
