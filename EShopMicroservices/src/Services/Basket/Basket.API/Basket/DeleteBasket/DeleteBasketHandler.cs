@@ -5,7 +5,7 @@ public class DeleteBasketHandler(IBasketRepository repository)
 {
     public async Task<DeleteBasketResult> Handle(DeleteBasketCommand command, CancellationToken cancellationToken)
     {
-        // todo: delete basket from database and cache
+        // ToDo: Delete basket from database and cache
         await repository.DeleteBasket(command.Username, cancellationToken);
 
         return new DeleteBasketResult(true);

@@ -10,8 +10,7 @@ public static class DependencyInjection
         services.AddCarter();
         services.AddExceptionHandler<CustomExceptionHandler>();
         services.AddHealthChecks()
-            .AddSqlServer(
-                configuration.GetConnectionString("Database") ?? throw new InvalidOperationException());
+            .AddNpgSql(configuration.GetConnectionString("Database") ?? throw new InvalidOperationException());
 
         return services;
     }

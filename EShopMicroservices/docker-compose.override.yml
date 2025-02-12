@@ -1,8 +1,8 @@
 version: "3.4"
 
 services:
-  basketdb:
-    container_name: basketdb
+  basket-db:
+    container_name: basket-db
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -13,8 +13,8 @@ services:
     volumes:
       - postgres_basket:/var/lib/postgresql/data
   
-  cataloguedb:
-    container_name: cataloguedb
+  catalogue-db:
+    container_name: catalogue-db
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -25,34 +25,61 @@ services:
     volumes:
       - postgres_catalogue:/var/lib/postgresql/data
   
-  distributedcache:
-    container_name: distributedcache
+  distributed-cache:
+    container_name: distributed-cache
     restart: always # restart whenever there is any problem with the cache
     ports:
       - "6379:6379"
   
-  orderdb:
-    container_name: orderdb
+  #  order-db:
+  #    container_name: order-db
+  #    environment:
+  #      - ACCEPT_EULA=Y
+  #      - SA_PASSWORD=SwN12345678
+  #    restart: always
+  #    ports:
+  #      - "1433:1433"
+  
+  order-db:
+    container_name: order-db
     environment:
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=SwN12345678
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=OrderDb
     restart: always
     ports:
-      - "1433:1433"
+      - "5434:5432"
+    volumes:
+      - postgres_basket:/var/lib/postgresql/data
+  
+  message-broker:
+    container_name: message-broker
+    hostname: ecommerce-mq
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+  
   
   basket.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
       # - ASPNETCORE_HTTPS_PORTS=8081
-      - ConnectionStrings__Database=Server=basketdb;Port=5432;Database=BasketDb;User Id=postgres;Password=postgres;Include Error Detail=true
-      - ConnectionStrings__Redis=distributedcache:6379 # use container names when containerizing services
+      - ConnectionStrings__Database=Server=basket-db;Port=5432;Database=BasketDb;User Id=postgres;Password=postgres;Include Error Detail=true
+      - ConnectionStrings__Redis=distributed-cache:6379 # use container names when containerizing services
       # - GrpcSettings__DiscountUrl=https://discount.grpc:8081 # https
       - GrpcSettings__DiscountUrl=http://discount.grpc:8080
+      - MessageBroker__Host=amqp://ecommerce-mq:5672 # settings for running within docker network
+      - MessageBroker__Username=guest
+      - MessageBroker__Password=guest
     depends_on:
-      - basketdb
+      - basket-db
       - discount.grpc
-      - distributedcache
+      - distributed-cache
     ports:
       - "6001:8080"
       # - "6061:8081"
@@ -65,9 +92,9 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
       # - ASPNETCORE_HTTPS_PORTS=8081
-      - ConnectionStrings__Database=Server=cataloguedb;Port=5432;Database=CatalogueDb;User Id=postgres;Password=postgres;Include Error Detail=true # Server is the name of the database service
+      - ConnectionStrings__Database=Server=catalogue-db;Port=5432;Database=CatalogueDb;User Id=postgres;Password=postgres;Include Error Detail=true # Server is the name of the database service
     depends_on:
-      - cataloguedb
+      - catalogue-db
     ports:
       - "6000:8080"
       - "6060:8081"
@@ -84,6 +111,27 @@ services:
     ports:
       - "6002:8080"
       # - "6062:8081"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+  
+  ordering.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      # - ASPNETCORE_HTTPS_PORTS=8081
+      # - ConnectionStrings__Database=Server=order-db;Database=OrderDb;User Id=sa;Password=SwN12345678;Encrypt=False;TrustServerCertificate=True
+      - ConnectionStrings__Database=Server=order-db;Port=5432;Database=OrderDb;User Id=postgres;Password=postgres;Include Error Detail=true
+      - MessageBroker__Host=amqp://ecommerce-mq:5672
+      - MessageBroker__Username=guest
+      - MessageBroker__Password=guest
+      - FeatureManagement__OrderFulfillment=false
+    depends_on:
+      - order-db
+      - message-broker
+    ports:
+      - "6003:8080"
+      # - "6063:8081"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro

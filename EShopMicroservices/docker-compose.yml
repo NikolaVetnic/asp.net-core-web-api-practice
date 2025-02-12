@@ -1,25 +1,32 @@
-version: '3.4'
+version: "3.4"
 
 services:
-  basketdb:
+  basket-db:
     image: postgres
 
-  cataloguedb:
+  catalogue-db:
     image: postgres
   
-  distributedcache:
+  distributed-cache:
     image: redis
   
-  orderdb:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    platform: linux/amd64
+  #    order-db:
+  #        image: mcr.microsoft.com/mssql/server:2022-latest
+  #        platform: linux/amd64
+  
+  order-db:
+    image: postgres
+  
+  message-broker:
+    image: rabbitmq:management
+  
   
   basket.api:
     container_name: basket.api
     image: ${DOCKER_REGISTRY-}basketapi
     build:
-      context: .
-      dockerfile: src/Services/Basket/Basket.Api/Dockerfile
+      context: ./src
+      dockerfile: Services/Basket/Basket.Api/Dockerfile
   
   catalogue.api:
     container_name: catalogue.api
@@ -34,7 +41,15 @@ services:
     build:
       context: .
       dockerfile: src/Services/Discount/Discount.Grpc/Dockerfile
+  
+  ordering.api:
+    container_name: ordering.api
+    image: ${DOCKER_REGISTRY-}orderingapi
+    build:
+      context: ./src
+      dockerfile: Services/Ordering/Ordering.Api/Dockerfile
 
 volumes:
   postgres_basket:
   postgres_catalogue:
+  postgres_ordering:

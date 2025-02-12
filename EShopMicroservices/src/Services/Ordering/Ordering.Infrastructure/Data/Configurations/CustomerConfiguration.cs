@@ -1,7 +1,4 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Ordering.Domain.Models;
-using Ordering.Domain.ValueObjects.Ids;
 
 namespace Ordering.Infrastructure.Data.Configurations;
 

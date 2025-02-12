@@ -16,9 +16,16 @@ public static class DependencyInjection
         services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
         services.AddScoped<ISaveChangesInterceptor, DispatchDomainEventsInterceptor>();
 
+        // services.AddDbContext<ApplicationDbContext>((serviceProvider, options) =>
+        // {
+        //     options.UseSqlServer(connectionString);
+        //     options.AddInterceptors(serviceProvider.GetServices<ISaveChangesInterceptor>());
+        // });
+
+        // Add Node-specific DbContext
         services.AddDbContext<ApplicationDbContext>((serviceProvider, options) =>
         {
-            options.UseSqlServer(connectionString);
+            options.UseNpgsql(connectionString);
             options.AddInterceptors(serviceProvider.GetServices<ISaveChangesInterceptor>());
         });
 

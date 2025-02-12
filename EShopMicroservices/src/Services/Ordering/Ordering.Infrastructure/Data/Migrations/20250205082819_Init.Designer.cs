@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Ordering.Infrastructure.Data;
 
 #nullable disable
@@ -13,8 +13,8 @@ using Ordering.Infrastructure.Data;
 namespace Ordering.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241127152503_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20250205082819_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,36 +22,36 @@ namespace Ordering.Infrastructure.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "9.0.0")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("Ordering.Domain.Models.Customer", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("character varying(255)");
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
@@ -64,27 +64,27 @@ namespace Ordering.Infrastructure.Data.Migrations
             modelBuilder.Entity("Ordering.Domain.Models.Order", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<Guid>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("text")
                         .HasDefaultValue("Draft");
 
                     b.Property<decimal>("TotalPrice")
@@ -97,34 +97,37 @@ namespace Ordering.Infrastructure.Data.Migrations
                             b1.Property<string>("AddressLine")
                                 .IsRequired()
                                 .HasMaxLength(180)
-                                .HasColumnType("nvarchar(180)");
+                                .HasColumnType("character varying(180)");
 
                             b1.Property<string>("Country")
+                                .IsRequired()
                                 .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)");
+                                .HasColumnType("character varying(50)");
 
                             b1.Property<string>("EmailAddress")
+                                .IsRequired()
                                 .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)");
+                                .HasColumnType("character varying(50)");
 
                             b1.Property<string>("FirstName")
                                 .IsRequired()
                                 .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)");
+                                .HasColumnType("character varying(50)");
 
                             b1.Property<string>("LastName")
                                 .IsRequired()
                                 .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)");
+                                .HasColumnType("character varying(50)");
 
                             b1.Property<string>("State")
+                                .IsRequired()
                                 .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)");
+                                .HasColumnType("character varying(50)");
 
                             b1.Property<string>("ZipCode")
                                 .IsRequired()
                                 .HasMaxLength(5)
-                                .HasColumnType("nvarchar(5)");
+                                .HasColumnType("character varying(5)");
                         });
 
                     b.ComplexProperty<Dictionary<string, object>>("OrderName", "Ordering.Domain.Models.Order.OrderName#OrderName", b1 =>
@@ -134,7 +137,7 @@ namespace Ordering.Infrastructure.Data.Migrations
                             b1.Property<string>("Value")
                                 .IsRequired()
                                 .HasMaxLength(100)
-                                .HasColumnType("nvarchar(100)")
+                                .HasColumnType("character varying(100)")
                                 .HasColumnName("OrderName");
                         });
 
@@ -143,24 +146,27 @@ namespace Ordering.Infrastructure.Data.Migrations
                             b1.IsRequired();
 
                             b1.Property<string>("CardName")
+                                .IsRequired()
                                 .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)");
+                                .HasColumnType("character varying(50)");
 
                             b1.Property<string>("CardNumber")
                                 .IsRequired()
                                 .HasMaxLength(24)
-                                .HasColumnType("nvarchar(24)");
+                                .HasColumnType("character varying(24)");
 
                             b1.Property<string>("Cvv")
+                                .IsRequired()
                                 .HasMaxLength(3)
-                                .HasColumnType("nvarchar(3)");
+                                .HasColumnType("character varying(3)");
 
                             b1.Property<string>("Expiration")
+                                .IsRequired()
                                 .HasMaxLength(10)
-                                .HasColumnType("nvarchar(10)");
+                                .HasColumnType("character varying(10)");
 
-                            b1.Property<int?>("PaymentMethod")
-                                .HasColumnType("int");
+                            b1.Property<int>("PaymentMethod")
+                                .HasColumnType("integer");
                         });
 
                     b.ComplexProperty<Dictionary<string, object>>("ShippingAddress", "Ordering.Domain.Models.Order.ShippingAddress#Address", b1 =>
@@ -170,34 +176,37 @@ namespace Ordering.Infrastructure.Data.Migrations
                             b1.Property<string>("AddressLine")
                                 .IsRequired()
                                 .HasMaxLength(180)
-                                .HasColumnType("nvarchar(180)");
+                                .HasColumnType("character varying(180)");
 
                             b1.Property<string>("Country")
+                                .IsRequired()
                                 .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)");
+                                .HasColumnType("character varying(50)");
 
                             b1.Property<string>("EmailAddress")
+                                .IsRequired()
                                 .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)");
+                                .HasColumnType("character varying(50)");
 
                             b1.Property<string>("FirstName")
                                 .IsRequired()
                                 .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)");
+                                .HasColumnType("character varying(50)");
 
                             b1.Property<string>("LastName")
                                 .IsRequired()
                                 .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)");
+                                .HasColumnType("character varying(50)");
 
                             b1.Property<string>("State")
+                                .IsRequired()
                                 .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)");
+                                .HasColumnType("character varying(50)");
 
                             b1.Property<string>("ZipCode")
                                 .IsRequired()
                                 .HasMaxLength(5)
-                                .HasColumnType("nvarchar(5)");
+                                .HasColumnType("character varying(5)");
                         });
 
                     b.HasKey("Id");
@@ -210,31 +219,31 @@ namespace Ordering.Infrastructure.Data.Migrations
             modelBuilder.Entity("Ordering.Domain.Models.OrderItem", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<Guid>("OrderId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18, 4)");
 
                     b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Quantity")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -248,24 +257,24 @@ namespace Ordering.Infrastructure.Data.Migrations
             modelBuilder.Entity("Ordering.Domain.Models.Product", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18, 4)");
