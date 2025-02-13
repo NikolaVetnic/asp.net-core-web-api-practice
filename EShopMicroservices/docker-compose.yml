@@ -55,6 +55,13 @@ services:
       context: ./src
       dockerfile: Services/Ordering/Ordering.Api/Dockerfile
 
+  shopping.web:
+    container_name: shopping.web
+    image: ${DOCKER_REGISTRY-}shoppingweb
+    build:
+      context: ./src
+      dockerfile: WebApps/Shopping.Web/Dockerfile
+
 volumes:
   postgres_basket:
   postgres_catalogue:
