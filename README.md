@@ -8,4 +8,8 @@ A simple CRUD API built for practicing writing integration tests. The code can b
 
 ## 2 EShopMicroservices
 
-A Udemy .NET Microservices tutorial app. The code can be viewed [here](./EShopMicroservices/).
+A Udemy .NET microservices tutorial app. The code can be viewed [here](./EShopMicroservices/).
+
+## 3 Secure Microservices
+
+A Udemy .NET secure microservices tutorial app. The code can be viewed [here](./SecureMicroservices/).
